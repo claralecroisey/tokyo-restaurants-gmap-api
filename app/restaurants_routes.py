@@ -1,4 +1,3 @@
-import requests
 from flask import Blueprint, current_app, jsonify
 
 restaurants_blueprint = Blueprint("restaurants", __name__, url_prefix="/restaurants")
@@ -6,32 +5,23 @@ restaurants_blueprint = Blueprint("restaurants", __name__, url_prefix="/restaura
 
 @restaurants_blueprint.route("", methods=["GET"])
 def get_restaurants_locations():
-    try:
-        # Tokyo location
-        data = {
-            "includedTypes": ["restaurant"],
-            "locationRestriction": {
-                "circle": {
-                    "center": {"latitude": 35.709026, "longitude": 139.731992},
-                    "radius": 500.0,
-                }
-            },
-        }
+    from app import gplaces
 
-        response = requests.post(
-            url="https://places.googleapis.com/v1/places:searchNearby",
-            json=data,
-            headers={
-                "Content-Type": "application/json",
-                "X-Goog-Api-Key": current_app.config["GOOGLE_PLACES_API_KEY"],
-                "X-Goog-FieldMask": "*",
-            },
+    try:
+        # WIP: hardcoding search coordinates to Tokyo location
+        _hardcoded_lat = 35.709026
+        _hardcoded_lng = 139.731992
+        _hardcoded_radius = 500.0
+
+        response = gplaces.search_places_nearby_coordinates(
+            lat=_hardcoded_lat,
+            lng=_hardcoded_lng,
+            radius=_hardcoded_radius,
+            type="restaurant",
         )
 
-        data = response.json()
-
-        if data:
-            restaurants = data["places"]
+        if response:
+            restaurants = response["places"]
         else:
             # When there are no results, the response is an empty object
             restaurants = []
