@@ -1,7 +1,10 @@
-from flask import Flask
 from os import environ
-from config import ProdConfig, DevConfig
+
+from flask import Flask
+from flask_cors import CORS
+
 from app.restaurants_routes import restaurants_blueprint
+from config import DevConfig, ProdConfig
 
 
 def create_app():
@@ -15,6 +18,10 @@ def create_app():
         app.config.from_object(DevConfig)
 
     app.register_blueprint(restaurants_blueprint)
+
+    # Enable CORS
+    CORS(app, origins=[app.config["CLIENT_URL"]], supports_credentials=True)
+
     return app
 
 
