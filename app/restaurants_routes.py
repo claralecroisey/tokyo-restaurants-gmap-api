@@ -24,7 +24,7 @@ def get_restaurants_locations():
             headers={
                 "Content-Type": "application/json",
                 "X-Goog-Api-Key": current_app.config["GOOGLE_PLACES_API_KEY"],
-                "X-Goog-FieldMask": "places.displayName",
+                "X-Goog-FieldMask": "places.id,places.displayName,places.location",
             },
         )
 
