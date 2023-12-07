@@ -36,7 +36,7 @@ def get_restaurants_locations():
             # When there are no results, the response is an empty object
             restaurants = []
 
-        return jsonify(restaurants=restaurants)
+        return restaurants, 200
     except Exception as e:
         current_app.logger.error(e)
         return (
